@@ -38,14 +38,12 @@ public class TelaItem {
 	private Label lblMensagem;
 	private TipoController tipoCtrl = new TipoController();
 	ObservableList<Tipo> opTipo = FXCollections.observableArrayList(tipoCtrl.listarTipos());
-	List<String> opTipoString = opTipo.stream()
-            .map(Tipo::getTipo)
-            .collect(Collectors.toList());
+	List<String> opTipoString = opTipo.stream().map(Tipo::getTipo).collect(Collectors.toList());
 //	List<Integer> opTipoCodigo = opTipo.stream()
 //            .map(Tipo::getCodigo)
 //            .collect(Collectors.toList());
 	private ComboBox<String> comboBox = new ComboBox<String>(FXCollections.observableArrayList(opTipoString));
-	
+
 	public Scene getScene() {
 		VBox root = new VBox(15);
 		root.setAlignment(Pos.CENTER);
@@ -54,7 +52,7 @@ public class TelaItem {
 		Label lblTitulo = new Label("Cadastro de Itens");
 		lblTitulo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 		lblTitulo.setTextFill(Color.DARKBLUE);
-		
+
 		HBox hboxItem = new HBox(30);
 		hboxItem.setAlignment(Pos.CENTER_LEFT);
 		Label lblItem = new Label("Item:");
@@ -65,7 +63,7 @@ public class TelaItem {
 		tfItem.setPrefWidth(250);
 		tfItem.setPromptText("Nome do Item");
 		hboxItem.getChildren().addAll(lblItem, tfItem);
-		
+
 		HBox hboxPreco = new HBox(30);
 		hboxPreco.setAlignment(Pos.CENTER_LEFT);
 		Label lblPreco = new Label("Preço:");
@@ -127,9 +125,7 @@ public class TelaItem {
 			precoOk = false;
 		}
 
-		return !item.isEmpty() &&
-				tipoOk &&
-				precoOk;
+		return !item.isEmpty() && tipoOk && precoOk;
 	}
 
 	private void handleSalvar() throws SQLException {
