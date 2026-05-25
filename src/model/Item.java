@@ -1,8 +1,7 @@
 package model;
 
-public class Item {
+public class Item extends Codigo {
 	
-	private int codItem;
     private String item;
     private double preco;
     private int codTipo;
@@ -16,14 +15,6 @@ public class Item {
 	}
 
     //GETTERS E SETTERS
-	public int getCodItem() {
-		return codItem;
-	}
-
-	public void setCodItem(int codItem) {
-		this.codItem = codItem;
-	}
-
 	public String getItem() {
 		return item;
 	}
@@ -46,6 +37,13 @@ public class Item {
 
 	public void setCodTipo(int codTipo) {
 		this.codTipo = codTipo;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Item [codItem=" + getCodigo() + ", item=" + item + ", preco=" + preco + ", codTipo=" + codTipo + "]";
 	}
     
 	

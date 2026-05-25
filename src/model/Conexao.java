@@ -16,7 +16,7 @@ public class Conexao {
 		try {
 			// Conexão com o banco
 			conexao = DriverManager.getConnection(server + banco + usuario);
-			JOptionPane.showMessageDialog(null, "Conexão realizada com sucesso!");
+			//JOptionPane.showMessageDialog(null, "Conexão realizada com sucesso!");
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Erro de conexão!\nERRO: " + ex.getMessage());
 		}
@@ -25,7 +25,7 @@ public class Conexao {
 	public static void desconectar() { // Fecha a conexão
 		try {
 			conexao.close(); // Fechar conexão
-			JOptionPane.showMessageDialog(null, "Conexão fechada com sucesso!");
+			//JOptionPane.showMessageDialog(null, "Conexão fechada com sucesso!");
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão!\nERRO: " + ex.getMessage());
 		}

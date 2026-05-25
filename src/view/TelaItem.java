@@ -1,10 +1,9 @@
 package view;
 
 import java.sql.SQLException;
-
 import javax.swing.JOptionPane;
-
 import controller.ItemController;
+import controller.TipoController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,26 +18,43 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import model.Conexao;
 import model.Item;
+import model.Tipo;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TelaItem {
 
-    private TextField tfItem;
-    private TextField tfPreco;
-    private TextField tfTipo;
-    private Label lblMensagem;
-    
-    private ItemController itemCtrl;
-    
-    public Scene getScene() {
+	private TextField tfItem;
+	private TextField tfPreco;
+	private Label lblMensagem;
+	private TipoController tipoCtrl = new TipoController();
+	ObservableList<Tipo> opTipo = FXCollections.observableArrayList(tipoCtrl.listarTipos());
+	List<String> opTipoString = opTipo.stream()
+            .map(Tipo::getTipo)
+            .collect(Collectors.toList());
+//	List<Integer> opTipoCodigo = opTipo.stream()
+//            .map(Tipo::getCodigo)
+//            .collect(Collectors.toList());
+	private ComboBox<String> comboBox = new ComboBox<String>(FXCollections.observableArrayList(opTipoString));
+	
+	public Scene getScene() {
 		VBox root = new VBox(15);
 		root.setAlignment(Pos.CENTER);
 		root.setPadding(new Insets(30));
 		root.setStyle("-fx-background-color: linear-gradient(to bottom, #e3f2fd, #f5f5f5);");
-
 		Label lblTitulo = new Label("Cadastro de Itens");
 		lblTitulo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 		lblTitulo.setTextFill(Color.DARKBLUE);
-
+		
 		HBox hboxItem = new HBox(30);
 		hboxItem.setAlignment(Pos.CENTER_LEFT);
 		Label lblItem = new Label("Item:");
@@ -49,7 +65,7 @@ public class TelaItem {
 		tfItem.setPrefWidth(250);
 		tfItem.setPromptText("Nome do Item");
 		hboxItem.getChildren().addAll(lblItem, tfItem);
-
+		
 		HBox hboxPreco = new HBox(30);
 		hboxPreco.setAlignment(Pos.CENTER_LEFT);
 		Label lblPreco = new Label("Preço:");
@@ -67,10 +83,9 @@ public class TelaItem {
 		lblTipo.setFont(Font.font(14));
 		lblTipo.setPrefWidth(85);
 		lblTipo.setMinWidth(60);
-		tfTipo = new TextField();
-		tfTipo.setPrefWidth(250);
-		tfTipo.setPromptText("Código do item");
-		hboxTipo.getChildren().addAll(lblTipo, tfTipo);
+		comboBox.setPromptText("Tipo do item");
+		comboBox.setPrefWidth(250);
+		hboxTipo.getChildren().addAll(lblTipo, comboBox);
 
 		Button btnSalvar = new Button("Salvar");
 		btnSalvar.setPrefWidth(150);
@@ -84,56 +99,65 @@ public class TelaItem {
 				e1.printStackTrace();
 			}
 		});
-		
+
 		lblMensagem = new Label();
 		lblMensagem.setTextFill(Color.RED);
 		lblMensagem.setFont(Font.font(12));
 		lblMensagem.setStyle("-fx-padding: 10 0 0 0;");
-
 		root.getChildren().addAll(lblTitulo, hboxItem, hboxPreco, hboxTipo, btnSalvar, lblMensagem);
-
 		Scene scene = new Scene(root, 450, 400);
 		return scene;
 	}
-    
-    private boolean validarCampos() {
-        String item = tfItem.getText().trim();
-        boolean tipoOk;
-        boolean precoOk;
-        
-        try {
-        	Integer.parseInt(tfTipo.getText().trim());
-        	tipoOk = true;
-        } catch (NumberFormatException e) {
-        	tipoOk = false;
-        }
-        
-        try {
-        	Float.parseFloat(tfPreco.getText().trim());
-        	precoOk = true;
-        } catch (NumberFormatException e) {
-        	precoOk = false;
-        }
-        
-        return 	!item.isEmpty() && 
-        		tipoOk &&
-        		precoOk;
-    }
+
+	private boolean validarCampos() {
+		String item = tfItem.getText().trim();
+		boolean tipoOk;
+		boolean precoOk;
+
+		if (comboBox.getValue() == null) {
+			tipoOk = false;
+		} else {
+			tipoOk = true;
+		}
+
+		try {
+			Float.parseFloat(tfPreco.getText().trim());
+			precoOk = true;
+		} catch (NumberFormatException e) {
+			precoOk = false;
+		}
+
+		return !item.isEmpty() &&
+				tipoOk &&
+				precoOk;
+	}
 
 	private void handleSalvar() throws SQLException {
 		lblMensagem.setText("");
 		if (validarCampos()) {
 			lblMensagem.setTextFill(Color.GREEN);
 			lblMensagem.setText("Cadastro realizado com sucesso!");
-			
 			String itemTxt = tfItem.getText().trim();
 			float precoTxt = Float.parseFloat(tfPreco.getText().trim());
-			int tipoTxt = Integer.parseInt(tfTipo.getText().trim());
-			
-		    Item item = new Item (itemTxt, precoTxt, tipoTxt);
-		    itemCtrl = new ItemController(item);
-		    itemCtrl.salvarItem();
-		    
+
+//			int tipoTxt = 
+
+//			List<Integer> precos = new ArrayList<>();
+
+//			 
+
+//			for (Item item : comboBox) {
+
+//			    precos.add(item.getPreco());
+
+//			}
+
+//		    Item item = new Item(itemTxt, precoTxt, tipoTxt);
+
+//		    itemCtrl = new ItemController(item);
+
+//		    itemCtrl.salvarItem();
+
 		} else {
 			lblMensagem.setTextFill(Color.RED);
 			lblMensagem.setText("Por favor, preencha todos os campos!");

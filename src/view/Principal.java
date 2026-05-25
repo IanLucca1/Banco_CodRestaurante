@@ -11,8 +11,8 @@ public class Principal extends Application{
     @Override
     public void start(Stage stage) {
         // Cria a tela de login
-        TelaItem telaLogin = new TelaItem();
-        Scene scene = telaLogin.getScene();
+        Home home = new Home();
+        Scene scene = home.getScene();
 
         // Configura o Stage (janela)
         stage.setTitle("Sistema de Comanda - Login");
