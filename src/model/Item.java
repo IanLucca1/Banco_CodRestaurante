@@ -1,7 +1,7 @@
 package model;
 
 public class Item extends Codigo {
-	
+	//ATRIBUTOS
     private String item;
     private double preco;
     private int codTipo;
@@ -9,6 +9,14 @@ public class Item extends Codigo {
     //CONSTRUTOR
     public Item(String item, double preco, int codTipo) {
 		super();
+		this.item = item;
+		this.preco = preco;
+		this.codTipo = codTipo;
+	}
+    
+    public Item(int codigo, String item, double preco, int codTipo) {
+		super();
+		setCodigo(codigo);
 		this.item = item;
 		this.preco = preco;
 		this.codTipo = codTipo;
@@ -39,12 +47,10 @@ public class Item extends Codigo {
 		this.codTipo = codTipo;
 	}
 
-
-
 	@Override
 	public String toString() {
-		return "Item [codItem=" + getCodigo() + ", item=" + item + ", preco=" + preco + ", codTipo=" + codTipo + "]";
-	}
-    
+		return this.item;
+	}	
+	
 	
 }

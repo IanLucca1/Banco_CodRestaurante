@@ -1,24 +1,27 @@
 package view;
 
-import model.Conexao;
+import java.sql.SQLException;
+
+import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.TelaItem;
-import javafx.application.Application;
 
-public class Principal extends Application{
+public class Principal extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Cria a tela de login
-        TelaItem telaLogin = new TelaItem();
-        Scene scene = telaLogin.getScene();
-
-        // Configura o Stage (janela)
-        stage.setTitle("Cadastrar novos itens");
-        stage.setScene(scene);
-        stage.setResizable(false); // impede redimensionamento
-        stage.show();
+        Home home = new Home();
+        Scene scene;
+		
+        try {
+			scene = home.getScene();
+			stage.setTitle("Home");
+	        stage.setScene(scene);
+	        stage.setResizable(false);
+	        stage.show();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
     }
 
     public static void main(String[] args) {

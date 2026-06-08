@@ -1,31 +1,36 @@
 package model;
 
-public class Conta extends Codigo {
-	 
-	private int codComanda;
-	 private float total;
-	 private char pago;
-	
-	 public Conta(int codComanda, float total, char pago) {
+public class Conta extends Codigo implements Faturavel {
+	// ATRIBUTOS
+	private int codMesa;
+	private double total;
+	private char pago;
+
+	// CONSTRUTOR
+	public Conta(int codMesa, double total) {
 		super();
-		this.codComanda = codComanda;
+		this.codMesa = codMesa;
 		this.total = total;
-		this.pago = pago;
+	}
+	
+	public Conta() {
+		super();
 	}
 
-	public int getCodComanda() {
-		return codComanda;
+	// GETTERS E SETTERS
+	public int getCodMesa() {
+		return codMesa;
 	}
 
-	public void setCodComanda(int codComanda) {
-		this.codComanda = codComanda;
+	public void setCodMesa(int codMesa) {
+		this.codMesa = codMesa;
 	}
 
-	public float getTotal() {
+	public double getTotal() {
 		return total;
 	}
 
-	public void setTotal(float total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
 
@@ -36,5 +41,10 @@ public class Conta extends Codigo {
 	public void setPago(char pago) {
 		this.pago = pago;
 	}
-	 
+
+	// MÉTODOS
+	@Override
+	public void calcularValor(double valorPedido) {
+		this.total += valorPedido;
+	}
 }

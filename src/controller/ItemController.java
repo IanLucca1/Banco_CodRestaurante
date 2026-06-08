@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Conexao;
@@ -11,27 +13,62 @@ import dao.ItemDAO;
 public class ItemController {
 
 	private ItemDAO dao;
-	private Item item;
-
-	public ItemController(Item item) {
-		this.item = item;
-	}
 	
 	public ItemController() {
 		super();
 	}
 	
 	@FXML
-	public void salvarItem() {
+	public boolean inserirItem(Item item) {
 		try {
-			Conexao.conectar(); // sua classe de conexão
+			Conexao.conectar();
 			dao = new ItemDAO(Conexao.conexao);
 			dao.inserir(item);
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Item salvo com sucesso!");
-			alert.show();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
+		} finally {
+			Conexao.desconectar();
+		}
+	}
+	
+	public boolean alterarItem(Item item) {
+		try {
+			Conexao.conectar();
+			dao = new ItemDAO(Conexao.conexao);
+			dao.alterar(item);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			Conexao.desconectar();
+		}
+	}
+	
+	public boolean deletarItem(Item item) {
+		try {
+			Conexao.conectar();
+			dao = new ItemDAO(Conexao.conexao);
+			dao.deletar(item);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			Conexao.desconectar();
+		}
+	}
+	
+	public ObservableList<Item> listarItens() {
+		try {
+			Conexao.conectar();
+			dao = new ItemDAO(Conexao.conexao);
+			return dao.listarItens();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FXCollections.observableArrayList();
 		} finally {
 			Conexao.desconectar();
 		}

@@ -13,12 +13,6 @@ import model.Tipo;
 public class TipoController {
 
 	private TipoDAO dao;
-	private Tipo tipo;
-	
-	public TipoController(Tipo tipo) {
-		super();
-		this.tipo = tipo;
-	}
 	
 	public TipoController() {
 		super();
@@ -28,7 +22,7 @@ public class TipoController {
 	public List<Tipo> listarTipos() {
 		List<Tipo> lista = new ArrayList<>();
 		try {
-			Conexao.conectar(); // sua classe de conexão
+			Conexao.conectar();
 			dao = new TipoDAO(Conexao.conexao);
 			lista = dao.listarTipos();
 		} catch (Exception e) {
@@ -37,6 +31,5 @@ public class TipoController {
 			Conexao.desconectar();
 		}
 		return lista;
-	}
-	
+	}	
 }

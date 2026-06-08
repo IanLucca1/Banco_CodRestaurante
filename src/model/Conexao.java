@@ -9,23 +9,19 @@ public class Conexao {
 	private static String server = "jdbc:sqlserver://10.109.8.9:1433;";
 	private static String banco = "databaseName=DA123_Exerc_G02;";
 	private static String usuario = "user=DA123_Exerc_G02;password=;encrypt=false;trustServerCertificate=true;loginTimeout=30;";
+	public static Connection conexao;
 
-	public static Connection conexao; // Conecta com o banco
-
-	public static void conectar() { // Efetua a conexão
+	public static void conectar() {
 		try {
-			// Conexão com o banco
 			conexao = DriverManager.getConnection(server + banco + usuario);
-			//JOptionPane.showMessageDialog(null, "Conexão realizada com sucesso!");
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Erro de conexão!\nERRO: " + ex.getMessage());
 		}
 	}
 
-	public static void desconectar() { // Fecha a conexão
+	public static void desconectar() {
 		try {
-			conexao.close(); // Fechar conexão
-			//JOptionPane.showMessageDialog(null, "Conexão fechada com sucesso!");
+			conexao.close();
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão!\nERRO: " + ex.getMessage());
 		}

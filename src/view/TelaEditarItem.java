@@ -3,7 +3,6 @@ package view;
 import java.sql.SQLException;
 import javafx.scene.Node;
 import controller.ItemController;
-import controller.TipoController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,21 +15,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import model.Item;
-import model.Tipo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
-public class TelaItem {
+public class TelaEditarItem {
 
 	private TextField tfItem;
 	private TextField tfPreco;
 	private Label lblMensagem;
-	private TipoController tipoCtrl = new TipoController();
-	ObservableList<Tipo> opTipo = FXCollections.observableArrayList(tipoCtrl.listarTipos());
-	private ComboBox<Tipo> comboBox = new ComboBox<>(opTipo);
 	private ItemController itemCtrl = new ItemController();
+	ObservableList<Item> opItens = FXCollections.observableArrayList(itemCtrl.listarItens());
+	private ComboBox<Item> comboBox = new ComboBox<>(opItens);
 
 	public Scene getScene() {
 		VBox root = new VBox(18);
@@ -39,7 +36,7 @@ public class TelaItem {
 		root.setStyle("-fx-background-color: linear-gradient(to bottom, #FCFBFA, #F3F1EE);");
  
 		String estiloNav = "-fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 16; -fx-cursor: hand;";
-		
+
 		Button btnVoltar = new Button("← Voltar");
 		btnVoltar.setStyle("-fx-background-color: #7F8C8D; " + estiloNav);		
 		btnVoltar.setOnAction(e -> {
@@ -54,13 +51,13 @@ public class TelaItem {
 			}
 		});
 		
-		Button btnTelaEditarItem = new Button("Editar Item");
-		btnTelaEditarItem.setStyle("-fx-background-color: #D35400; " + estiloNav);
-		btnTelaEditarItem.setOnAction(e -> {
-			TelaEditarItem telaEditarItem = new TelaEditarItem();
-			Scene scene = telaEditarItem.getScene();
+		Button btnTelaItem = new Button("Cadastrar Novo");
+		btnTelaItem.setStyle("-fx-background-color: #556B2F; " + estiloNav);
+		btnTelaItem.setOnAction(e -> {
+			TelaItem telaItem = new TelaItem();
+			Scene scene = telaItem.getScene();
 			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-			stage.setTitle("Editar Item");
+			stage.setTitle("Itens");
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -76,10 +73,10 @@ public class TelaItem {
 			stage.show();
 		});
 		
-		HBox hboxNav = new HBox(10, btnVoltar, btnTelaEditarItem, btnTelaExcluirItem);
+		HBox hboxNav = new HBox(10, btnVoltar, btnTelaItem, btnTelaExcluirItem);
 		hboxNav.setAlignment(Pos.TOP_LEFT);
 
-		Label lblTitulo = new Label("Cadastro de Itens");
+		Label lblTitulo = new Label("Editar Itens Cadastrados");
 		lblTitulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
 		lblTitulo.setTextFill(Color.web("#3E2723"));
 		lblTitulo.setStyle("-fx-padding: 10 0;");
@@ -87,59 +84,65 @@ public class TelaItem {
 		String estiloLabel = "-fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #5D4037;";
 		String estiloInput = "-fx-background-radius: 5; -fx-border-color: #BDC3C7; -fx-border-radius: 5; -fx-padding: 6;";
 
+		HBox hboxCodItem = new HBox(20);
+		hboxCodItem.setAlignment(Pos.CENTER_LEFT);
+		Label lblCodItem = new Label("Selecionar:");
+		lblCodItem.setStyle(estiloLabel);
+		lblCodItem.setPrefWidth(95);
+		comboBox.setPromptText("Selecione o item para alterar");
+		comboBox.setPrefWidth(250);
+		comboBox.setStyle("-fx-background-radius: 5; -fx-padding: 3;");
+		comboBox.setConverter(new javafx.util.StringConverter<Item>() {
+			@Override
+			public String toString(Item item) {
+				return item == null ? "" : item.getItem();
+			}
+			@Override
+			public Item fromString(String string) {
+				return null;
+			}
+		});
+		hboxCodItem.getChildren().addAll(lblCodItem, comboBox);
+
 		HBox hboxItem = new HBox(20);
 		hboxItem.setAlignment(Pos.CENTER_LEFT);
-		Label lblItem = new Label("Nome:");
+		Label lblItem = new Label("Novo Nome:");
 		lblItem.setStyle(estiloLabel);
-		lblItem.setPrefWidth(85);
+		lblItem.setPrefWidth(95);
 		tfItem = new TextField();
-		tfItem.setPrefWidth(260);
-		tfItem.setPromptText("Ex: Suco de Laranja Natural");
+		tfItem.setPrefWidth(250);
 		tfItem.setStyle(estiloInput);
 		hboxItem.getChildren().addAll(lblItem, tfItem);
 
 		HBox hboxPreco = new HBox(20);
 		hboxPreco.setAlignment(Pos.CENTER_LEFT);
-		Label lblPreco = new Label("Preço (R$):");
+		Label lblPreco = new Label("Novo Preço:");
 		lblPreco.setStyle(estiloLabel);
-		lblPreco.setPrefWidth(85);
+		lblPreco.setPrefWidth(95);
 		tfPreco = new TextField();
-		tfPreco.setPrefWidth(260);
-		tfPreco.setPromptText("Ex: 12.50");
+		tfPreco.setPrefWidth(250);
 		tfPreco.setStyle(estiloInput);
 		hboxPreco.getChildren().addAll(lblPreco, tfPreco);
 
-		HBox hboxTipo = new HBox(20);
-		hboxTipo.setAlignment(Pos.CENTER_LEFT);
-		Label lblTipo = new Label("Categoria:");
-		lblTipo.setStyle(estiloLabel);
-		lblTipo.setPrefWidth(85);
-		comboBox.setPromptText("Selecione a categoria");
-		comboBox.setPrefWidth(260);
-		comboBox.setStyle("-fx-background-radius: 5; -fx-padding: 3;");
-		comboBox.setConverter(new javafx.util.StringConverter<Tipo>() {
-			@Override
-			public String toString(Tipo tipo) {
-				return tipo == null ? "" : tipo.getTipo();
-			}
-			@Override
-			public Tipo fromString(String string) {
-				return null;
+		// Evento para preencher automaticamente os campos ao selecionar o item
+		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+			if (newValue != null) {
+				tfItem.setText(newValue.getItem());
+				tfPreco.setText(String.valueOf(newValue.getPreco()));
 			}
 		});
-		hboxTipo.getChildren().addAll(lblTipo, comboBox);
 
-		Button btnInserir = new Button("Salvar Item");
-		btnInserir.setStyle("-fx-background-color: #556B2F; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;");
-		btnInserir.setOnAction(e -> {
+		Button btnAlterar = new Button("Atualizar Dados");
+		btnAlterar.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;");
+		btnAlterar.setOnAction(e -> {
 			try {
-				handleInserirItem();
+				handleAlterarItem();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		});
 
-		HBox hboxBtns = new HBox(btnInserir);
+		HBox hboxBtns = new HBox(btnAlterar);
 		hboxBtns.setAlignment(Pos.CENTER);
 		hboxBtns.setStyle("-fx-padding: 15 0 0 0;");
 
@@ -147,13 +150,14 @@ public class TelaItem {
 		lblMensagem.setFont(Font.font("Segoe UI", FontWeight.MEDIUM, 13));
 		lblMensagem.setStyle("-fx-padding: 10 0 0 0;");
 		
-		root.getChildren().addAll(hboxNav, lblTitulo, hboxItem, hboxPreco, hboxTipo, hboxBtns, lblMensagem);
-		return new Scene(root, 480, 460);
+		root.getChildren().addAll(hboxNav, lblTitulo, hboxCodItem, hboxItem, hboxPreco, hboxBtns, lblMensagem);
+		Scene scene = new Scene(root, 480, 480);
+		return scene;
 	}
 
 	private boolean validarCampos() {
 		String item = tfItem.getText().trim();
-		boolean tipoOk = comboBox.getValue() != null;
+		boolean codItemOk = comboBox.getValue() != null;
 		boolean precoOk;
 		try {
 			Float.parseFloat(tfPreco.getText().trim());
@@ -161,28 +165,30 @@ public class TelaItem {
 		} catch (NumberFormatException e) {
 			precoOk = false;
 		}
-		return !item.isEmpty() && tipoOk && precoOk;
+		return !item.isEmpty() && codItemOk && precoOk;
 	}
 
-	private void handleInserirItem() throws SQLException {
+	private void handleAlterarItem() throws SQLException {
 		lblMensagem.setText("");
 		if (validarCampos()) {
-			lblMensagem.setTextFill(Color.web("#27AE60"));
-			lblMensagem.setText("✓ Cadastro realizado com sucesso!");
+			Item itemSelecionado = comboBox.getValue();
 			String itemTxt = tfItem.getText().trim();
 			float precoTxt = Float.parseFloat(tfPreco.getText().trim());
-			Tipo tipoSelecionado = comboBox.getValue();
-			int tipoTxt = tipoSelecionado.getCodigo();
 			 
-			Item item = new Item(itemTxt, precoTxt, tipoTxt);
-			itemCtrl.inserirItem(item);
+			Item item = new Item(itemSelecionado.getCodigo(), itemTxt, precoTxt, itemSelecionado.getCodTipo());
+			itemCtrl.alterarItem(item);
 			
+			lblMensagem.setTextFill(Color.web("#27AE60"));
+			lblMensagem.setText("✓ Item atualizado com sucesso!");
+			
+			// Atualiza a lista da combobox
+			opItens.setAll(itemCtrl.listarItens());
 			tfItem.clear();
 			tfPreco.clear();
 			comboBox.setValue(null);
 		} else {
 			lblMensagem.setTextFill(Color.web("#C0392B"));
-			lblMensagem.setText("⚠ Preencha todos os campos corretamente.");
+			lblMensagem.setText("⚠ Erro ao atualizar. Verifique os dados inseridos.");
 		}
 	}
 }
